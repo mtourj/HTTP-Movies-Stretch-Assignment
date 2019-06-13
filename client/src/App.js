@@ -3,6 +3,8 @@ import { Route } from 'react-router-dom';
 import SavedList from './Movies/SavedList';
 import MovieList from './Movies/MovieList';
 import Movie from './Movies/Movie'
+import AddMovie from './Movies/AddMovie';
+import axios from 'axios';
 
 export default class App extends Component {
   constructor(){
@@ -19,14 +21,25 @@ export default class App extends Component {
     this.setState({savedList});
   }
 
+  addMovie = movie => {
+    axios.post('http://localhost:5000/api/movies/', movie)
+    .then( res => {
+      console.log('sucess! message: ' + res); 
+    })
+    .catch( err => {
+      console.error(err);
+    });
+  }
+
   render(){
     return (
       <div>
         <SavedList list={this.state.savedList} />
         <Route exact path="/" component={MovieList} />
-        <Route path="/movies/:id" render={ (props) => {
+        <Route exact path="/movies/:id" render={ (props) => {
           return(<Movie {...props} addToSavedList={this.addToSavedList}/>)
         }} />
+        <Route exact path='/movie/add' render={props => <AddMovie {...props} addMovie={this.addMovie} />} />
       </div>
     )
   }
