@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
-import MovieCard from './MovieCard';
+import React, { Component } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import MovieCard from "./MovieCard";
 export default class MovieList extends Component {
   constructor(props) {
     super(props);
@@ -12,12 +12,15 @@ export default class MovieList extends Component {
 
   componentDidMount() {
     // fill me in with an HTTP Request to `localhost:5000/api/movies`
-    this.setState({ movies: [] });
+    axios.get("http://localhost:5000/api/movies").then(res => {
+      this.setState({ movies: res.data });
+    });
   }
 
   render() {
     return (
       <div className="movie-list">
+        <Link to='/movie/add'>Add new movie...</Link>
         {this.state.movies.map(movie => (
           <MovieDetails key={movie.id} movie={movie} />
         ))}
